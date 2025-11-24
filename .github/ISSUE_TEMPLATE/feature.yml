@@ -1,0 +1,22 @@
+name: Feature Request
+description: Suggest an idea for this project
+title: "[FEAT] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What is the feature?
+    validations:
+      required: true
+  - type: textarea
+    id: justification
+    attributes:
+      label: Justification
+      description: Why is this needed?
+  - type: input
+    id: cost-impact
+    attributes:
+      label: Estimated Cost Impact (₹)
+      description: Will this increase or decrease costs?

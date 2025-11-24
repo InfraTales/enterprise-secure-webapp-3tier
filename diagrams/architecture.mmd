@@ -1,0 +1,53 @@
+%% Multi-Tier Web App Architecture
+%% VPC, Lambda, EC2, CloudFront, S3, WAF, Config
+
+flowchart TB
+  subgraph Internet
+    Users((Users))
+  end
+  
+  subgraph AWS[AWS Cloud - us-east-1]
+    subgraph Edge
+      CF[CloudFront Distribution]
+      WAF[AWS WAF]
+    end
+    
+    subgraph VPC[VPC 10.0.0.0/16]
+      subgraph Public[Public Subnets]
+        NAT1[NAT Gateway AZ1]
+        NAT2[NAT Gateway AZ2]
+        Bastion[Bastion Host]
+      end
+      
+      subgraph Private[Private Subnets]
+        Lambda[Lambda Functions]
+        EC2[EC2 Instances]
+      end
+    end
+    
+    S3Content[S3 Content Bucket<br/>KMS Encrypted]
+    S3Logs[S3 Logs Bucket]
+    Config[AWS Config]
+    SNS[SNS Alerts]
+    SM[Secrets Manager]
+    SSM[Systems Manager]
+  end
+  
+  Users -->|HTTPS| WAF
+  WAF --> CF
+  CF -->|OAI| S3Content
+  CF --> Lambda
+  
+  Bastion -.SSH.-> EC2
+  Lambda --> NAT1
+  Lambda --> NAT2
+  EC2 --> NAT1
+  EC2 --> NAT2
+  
+  Lambda -.read.-> SM
+  Lambda -.read.-> SSM
+  EC2 -.read.-> SM
+  
+  VPC -.Flow Logs.-> S3Logs
+  Config -.monitor.-> VPC
+  Config -->|non-compliant| SNS

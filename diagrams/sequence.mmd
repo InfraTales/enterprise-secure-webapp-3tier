@@ -1,0 +1,31 @@
+%% Request Lifecycle: User → CloudFront → Lambda → Response
+
+sequenceDiagram
+  participant User
+  participant WAF as AWS WAF
+  participant CF as CloudFront
+  participant S3 as S3 Content
+  participant Lambda as Lambda Function
+  participant SM as Secrets Manager
+  
+  User->>WAF: HTTPS Request
+  WAF->>WAF: Check Rules (SQL, XSS, Rate)
+  
+  alt Request Blocked
+    WAF-->>User: 403 Forbidden
+  else Request Allowed
+    WAF->>CF: Forward Request
+    
+    alt Static Content
+      CF->>S3: Get Object (OAI)
+      S3-->>CF: Return Content
+      CF-->>User: 200 OK + Content
+    else Dynamic Content
+      CF->>Lambda: Invoke Function
+      Lambda->>SM: Get Secret
+      SM-->>Lambda: Return Credentials
+      Lambda->>Lambda: Process Request
+      Lambda-->>CF: Return Response
+      CF-->>User: 200 OK + Response
+    end
+  end

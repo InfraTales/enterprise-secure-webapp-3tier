@@ -1,0 +1,15 @@
+%% Data Flow: VPC Flow Logs → S3, Config → SNS
+
+flowchart LR
+  VPC[VPC Traffic] -->|Flow Logs| S3Logs[S3 Logs Bucket]
+  
+  Config[AWS Config] -->|Evaluate| Rules[Config Rules]
+  Rules -->|Compliant| Dashboard[Config Dashboard]
+  Rules -->|Non-Compliant| SNS[SNS Topic]
+  SNS -->|Email| Team[DevOps Team]
+  
+  Lambda[Lambda Execution] -->|CloudWatch Logs| CW[CloudWatch Logs]
+  EC2[EC2 Instances] -->|CloudWatch Logs| CW
+  
+  CW -->|Insights Queries| Metrics[CloudWatch Metrics]
+  Metrics -->|Alarms| SNS

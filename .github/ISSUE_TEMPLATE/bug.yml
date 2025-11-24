@@ -1,0 +1,40 @@
+name: Bug Report
+description: Create a report to help us improve
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the bug clearly.
+      placeholder: "I deployed the stack and..."
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction Steps
+      description: How can we reproduce this?
+      placeholder: |
+        1. Clone repo
+        2. Run `cdk deploy`
+        3. See error...
+    validations:
+      required: true
+  - type: input
+    id: cost-impact
+    attributes:
+      label: Cost Impact (₹)
+      description: Did this bug cause unexpected costs?
+      placeholder: "e.g., ₹500 extra due to loop"
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Paste relevant logs here.
+      render: shell
