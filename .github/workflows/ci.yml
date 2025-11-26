@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -40,10 +40,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Markdown Lint
-        uses: nosborn/github-action-markdown-cli@v3.3.0
+        uses: nosborn/github-action-markdown-cli@v4.3.0
         with:
           files: .
           config_file: .markdownlint.json
@@ -60,7 +60,7 @@ jobs:
     needs: [security-scan, lint]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Detect IaC Tool
         id: detect
@@ -78,13 +78,13 @@ jobs:
       # CDK
       - name: Setup Node (CDK)
         if: steps.detect.outputs.tool == 'cdk'
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Setup Java (CDK Java)
         if: steps.detect.outputs.tool == 'cdk' && hashFiles('pom.xml', 'build.gradle') != ''
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'corretto'
           java-version: '17'
@@ -151,12 +151,12 @@ jobs:
     needs: [security-scan, lint]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Java
       - name: Setup Java
         if: hashFiles('pom.xml', 'build.gradle') != ''
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'corretto'
           java-version: '17'
@@ -176,7 +176,7 @@ jobs:
       # Node.js / TypeScript
       - name: Setup Node
         if: hashFiles('package.json') != ''
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
@@ -202,7 +202,7 @@ jobs:
 
       # Coverage Upload
       - name: Upload Coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         if: always()
         with:
           files: coverage/lcov.info,target/site/jacoco/jacoco.xml,coverage.xml
