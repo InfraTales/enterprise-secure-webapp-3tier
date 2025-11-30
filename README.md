@@ -129,7 +129,18 @@ This project uses environment variables and CDK context (e.g., environment varia
 
 ---
 
-## Contributing
+## 👤 Author
+
+**Rahul Ladumor** - Founder of InfraTales
+
+- 🌐 Portfolio: [rahulladumor.in](https://www.rahulladumor.in)
+- ☁️ Blog: [acloudwithrahul.in](https://www.acloudwithrahul.in)
+- 💼 GitHub: [@rahulladumor](https://github.com/rahulladumor)
+- 🏢 Organization: [InfraTales](https://github.com/InfraTales)
+- 📧 Email: rahul.ladumor@infratales.com
+- 💬 LinkedIn: [linkedin.com/in/rahulladumor](https://www.linkedin.com/in/rahulladumor)
+
+## 🤝 Contributing
 
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
