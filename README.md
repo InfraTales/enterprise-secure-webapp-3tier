@@ -51,7 +51,7 @@ This project deploys a production-ready 3-tier architecture with VPC isolation, 
 
 ## Quick Start
 
-For a detailed walkthrough, see [QUICK_START.md](QUICK_START.md).
+For a detailed walkthrough, refer to the Quick Start section above.
 
 1.  **Clone the repository:**
     ```bash
