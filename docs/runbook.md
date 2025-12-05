@@ -1,41 +1,70 @@
 # Operations Runbook
 
-## Alerts & Thresholds
+## Overview
+This runbook provides operational procedures for managing and maintaining this infrastructure.
 
-| Alert Name | Threshold | Severity | Action |
-| :--- | :--- | :--- | :--- |
-| **Lambda Errors** | > 5% error rate | High | Check CloudWatch Logs, rollback if needed |
-| **NAT Gateway Packet Drop** | > 1000/min | Critical | Check bandwidth limits, scale |
-| **WAF Block Rate** | > 100/min | Medium | Investigate source IPs, adjust rules |
-| **Config Non-Compliant** | Any resource | High | Review Config dashboard, remediate |
+## Prerequisites
+- AWS CLI configured
+- Terraform/CDK/Pulumi installed
+- Appropriate IAM permissions
 
-## Common Tasks
+## Common Operations
 
-### 1. Rotate Bastion SSH Keys
-**Trigger**: Scheduled rotation (90 days) or compromise
-**Steps**:
-1.  Generate new key pair: `aws ec2 create-key-pair --key-name webapp-bastion-new`
-2.  Update EC2 instance with new authorized_keys
-3.  Test access with new key
-4.  Revoke old key: `aws ec2 delete-key-pair --key-name webapp-bastion-old`
+### Deployment
+```bash
+# Development
+./scripts/deploy.sh dev
 
-### 2. Scale Lambda Concurrency
-**Trigger**: Throttling errors in CloudWatch
-**Steps**:
-1.  Request limit increase: AWS Support ticket
-2.  OR implement SQS buffering for burst traffic
-3.  Monitor reserved concurrency usage
+# Production
+./scripts/deploy.sh prod
+```
 
-### 3. Update WAF Rules
-**Trigger**: New attack pattern detected
-**Steps**:
-1.  Test rule in CloudFormation: `cdk diff`
-2.  Deploy: `cdk deploy`
-3.  Monitor WAF metrics for false positives
+### Monitoring
+- CloudWatch Dashboard: Check AWS Console
+- Alerts: Configured via SNS
+- Logs: CloudWatch Logs
 
----
+### Troubleshooting
 
-<div align="center">
-  <a href="https://infratales.com">InfraTales</a> •
-  <a href="https://infratales.com/projects">Projects</a>
-</div>
+#### Issue: Deployment Fails
+**Symptoms**: Terraform/CDK apply fails
+**Resolution**:
+1. Check AWS credentials
+2. Verify IAM permissions
+3. Review error logs
+4. Check resource quotas
+
+#### Issue: High Costs
+**Symptoms**: Unexpected AWS charges
+**Resolution**:
+1. Review Cost Explorer
+2. Check for unused resources
+3. Verify auto-scaling policies
+4. Review instance types
+
+### Maintenance Windows
+- Preferred: Sunday 02:00-06:00 UTC
+- Avoid: Business hours (09:00-17:00 local time)
+
+### Escalation
+1. Team Lead
+2. DevOps Manager
+3. On-call Engineer
+
+## Emergency Procedures
+
+### Rollback
+```bash
+# Terraform
+terraform apply -var-file=previous.tfvars
+
+# CDK
+cdk deploy --previous-version
+
+# Pulumi
+pulumi stack select previous
+pulumi up
+```
+
+### Disaster Recovery
+See [DISASTER_RECOVERY.md](DISASTER_RECOVERY.md)
